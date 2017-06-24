@@ -1,0 +1,4 @@
+#define WIFI_SSID ""
+#define WIFI_PASSWORD ""
+
+#define OPEN_WEATHER_API_KEY ""
