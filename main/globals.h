@@ -18,4 +18,8 @@
 
 #define HOUR 3600000
 
+#define CITY "Warsaw"
+#define UNITS "metric"
+#define API_HOST "http://api.openweathermap.org/data/2.5/weather"
+
 #endif

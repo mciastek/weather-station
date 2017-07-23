@@ -10,23 +10,20 @@
 #include "config.h"
 #include "globals.h"
 #include "digits_helpers.h"
+#include "drawing_helpers.h"
 
 // When we setup the NeoPixel library, we tell it how many pixels, and which pin to use to send signals.
 // Note that for older NeoPixel strips you might need to change the third parameter--see the strandtest
 // example for more information on possible values.
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-const char* city = "Warsaw";
-const char* openWeatherAPIKey = "e346bfcf6b7024626b87816a351e43a7";
-const char* openWeatherAPIHost = "http://api.openweathermap.org/data/2.5/weather";
-
-const int hour = 3600000;
+const char* request_url = API_HOST "?q=" CITY "&units=" UNITS "&appid=" OPEN_WEATHER_API_KEY;
 
 const size_t bufferSize = JSON_ARRAY_SIZE(1) + JSON_OBJECT_SIZE(1) + 2*JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(4) + JSON_OBJECT_SIZE(5) + JSON_OBJECT_SIZE(6) + JSON_OBJECT_SIZE(12) + 380;
 
 int pixel_matrix[NUMPIXELS] = {
   0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 1,
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
@@ -39,7 +36,7 @@ void getWeather() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
 
-    http.begin("http://api.openweathermap.org/data/2.5/weather?q=Warsaw&units=metric&appid=e346bfcf6b7024626b87816a351e43a7");
+    http.begin(request_url);
 
     int httpCode = http.GET();
 
@@ -55,17 +52,28 @@ void getWeather() {
       JsonObject& main = parsed["main"];
 
       int temp = main["temp"];
+      int *rgb = getColorByTemp(temp);
+
+      if (temp < 0) {
+        temp = temp * -1;
+      } else if (temp > 99) {
+        temp = 99;
+      }
 
       Serial.println(temp);
+
+      insertNumberIntoMatrix(pixel_matrix, temp);
+      drawPixels(pixel_matrix, pixels, rgb);
     }
 
     http.end();
   }
 
-  delay(hour);
+  delay(HOUR);
 }
 
 void setup() {
+  
   // put your setup code here, to run once:
   Serial.begin(115200);
   Serial.println(ESP.getChipId(), HEX);
@@ -89,49 +97,19 @@ void setup() {
   Serial.print("Device IP: ");
   Serial.print(WiFi.localIP());
 
-//  char *digits = getDigits(12);
-//  int first = digits[0];
-//  int second = digits[1];
-//
-//  Serial.print("First: ");
-//  Serial.print(first);
-//  Serial.println("");
-//  Serial.print(second);
+//  insertNumberIntoMatrix(pixel_matrix, 12);
 
-  insertNumberIntoMatrix(pixel_matrix, 12);
-
-  for (int m = 0; m < MATRIX_ROWS; m++) {
-      for (int n = 0; n < MATRIX_COLS; n++) {
-          Serial.print(pixel_matrix[m * MATRIX_COLS + n]);   
-      }
-      Serial.println("");
-  } 
+//  for (int m = 0; m < MATRIX_ROWS; m++) {
+//      for (int n = 0; n < MATRIX_COLS; n++) {
+//          Serial.print(pixel_matrix[m * MATRIX_COLS + n]);   
+//      }
+//      Serial.println("");
+//  } 
 
   pixels.begin();
   pixels.setBrightness(32);
 }
 
 void loop() {
-  
-  for (int i = 0; i < NUMPIXELS; i++) {
-    if (pixel_matrix[i] == 1) {
-      pixels.setPixelColor(i, pixels.Color(0,150,0));
-    }
-
-    pixels.show();
-  }
-  
-//  char *digits = getDigits(12);
-//
-//  printf("%s", digit[0]);
-//  printf("%s", digit[1]);
-//  int i, j;
-
-//  for (i = 0; i < NUMPIXELS; i++) {
-//    if (digit[i] == 1) {
-//      pixels.setPixelColor(i, pixels.Color(0,150,0));
-//    }
-//
-//    pixels.show();
-//  }
+  getWeather();
 }

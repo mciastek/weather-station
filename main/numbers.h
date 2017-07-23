@@ -1,7 +1,10 @@
 #ifndef NUMBERS_H_
 #define NUMBERS_H_
 
-#include "globals.h"
+#define NUM_ROWS 5
+#define NUM_COLS 3
+
+#define NUM_SIZE NUM_ROWS * NUM_COLS
 
 int zero[NUM_SIZE] = {
   1,1,1,
