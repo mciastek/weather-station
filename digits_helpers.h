@@ -4,6 +4,9 @@
 #include "globals.h"
 #include "numbers.h"
 
+const int numberPosX = 2;
+const int numberPosY = 4;
+
 int getNumLength(unsigned int number) {
   return (int)(log10((float)number)) + 1;
 }
@@ -49,9 +52,6 @@ void insertNumberIntoMatrix(int *matrix, int num) {
   char *digits = getDigits(num);
   int digits_size = getNumLength(num);
 
-  int posX = 2;
-  int posY = 4;
-
   for (int i = 0; i < NUMPIXELS; i++) {
       for (int j = 0; j < digits_size; j++) {
           int *num_matrix = getDigitMatrix(digits[j]);
@@ -60,8 +60,8 @@ void insertNumberIntoMatrix(int *matrix, int num) {
               int num_row = (int)(k / NUM_COLS);
               int num_column = k % NUM_COLS;
 
-              int new_row = num_row + posX;
-              int new_column = num_column + (j * posY);
+              int new_row = num_row + numberPosX;
+              int new_column = num_column + (j * numberPosY);
 
               int new_index = (new_row * MATRIX_COLS) + new_column;
 
@@ -70,6 +70,18 @@ void insertNumberIntoMatrix(int *matrix, int num) {
               }
           }
       }
+  }
+
+  if (DEBUG_MODE == 1) {
+    Serial.println("");
+
+    for (int m = 0; m < MATRIX_ROWS; m++) {
+      for (int n = 0; n < MATRIX_COLS; n++) {
+        Serial.print(matrix[m * MATRIX_COLS + n]);
+      }
+
+      Serial.println("");
+   }
   }
 
   free(digits);

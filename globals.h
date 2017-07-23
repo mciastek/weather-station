@@ -1,6 +1,8 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
+#define DEBUG_MODE 1
+
 #define MATRIX_ROWS 8
 #define MATRIX_COLS 8
 
@@ -17,9 +19,13 @@
 #define NUMPIXELS MATRIX_ROWS * MATRIX_COLS
 
 #define HOUR 3600000
+#define MINUTE 60000
 
 #define CITY "Warsaw"
 #define UNITS "metric"
 #define API_HOST "http://api.openweathermap.org/data/2.5/weather"
+
+// Dallas temperature meter PIN
+#define ONE_WIRE_BUS D1
 
 #endif
