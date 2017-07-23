@@ -107,7 +107,7 @@ void setup() {
 //  } 
 
   pixels.begin();
-  pixels.setBrightness(32);
+  pixels.setBrightness(64);
 }
 
 void loop() {
