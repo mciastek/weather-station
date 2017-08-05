@@ -11,6 +11,7 @@
 
 #include "digits_helpers.h"
 #include "drawing_helpers.h"
+#include "icons_helpers.h"
 
 const char* request_url = API_HOST "?q=" CITY "&units=" UNITS "&appid=" OPEN_WEATHER_API_KEY;
 
@@ -19,7 +20,8 @@ const size_t bufferSize = JSON_ARRAY_SIZE(1) + JSON_OBJECT_SIZE(1) + 2*JSON_OBJE
 // When we setup the NeoPixel library, we tell it how many pixels, and which pin to use to send signals.
 // Note that for older NeoPixel strips you might need to change the third parameter--see the strandtest
 // example for more information on possible values.
-Adafruit_NeoPixel temperaturePixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel temperaturePixels = Adafruit_NeoPixel(NUMPIXELS, FIRST_PIXELS_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel iconPixels = Adafruit_NeoPixel(NUMPIXELS, SECOND_PIXELS_PIN, NEO_GRB + NEO_KHZ800);
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature DS18B20(&oneWire);
@@ -84,7 +86,8 @@ void getRemoteWeather() {
       }
 
       insertNumberIntoMatrix(pixel_matrix, temp);
-      drawPixels(pixel_matrix, temperaturePixels, rgb);
+      drawDigits(pixel_matrix, temperaturePixels, rgb);
+      drawIconFromName("01d", iconPixels);
     }
 
     http.end();
@@ -107,7 +110,7 @@ void getInternalTemperature() {
   }
 
   insertNumberIntoMatrix(pixel_matrix, temp);
-  drawPixels(pixel_matrix, temperaturePixels, rgb);
+  drawDigits(pixel_matrix, temperaturePixels, rgb);
 
   delay(5 * MINUTE);
 }

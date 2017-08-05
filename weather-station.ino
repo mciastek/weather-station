@@ -5,6 +5,8 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
+#include <SPI.h>
+#include <SD.h>
 
 #include "config.h"
 #include "globals.h"
@@ -12,6 +14,28 @@
 
 void setup() {
   Serial.begin(115200);
+
+  temperaturePixels.begin();
+  temperaturePixels.setBrightness(BRIGHTNESS);
+
+  iconPixels.begin();
+  iconPixels.setBrightness(BRIGHTNESS);
+
+  DS18B20.begin();
+
+  if (DEBUG_MODE == 1) {
+    Serial.print("Initializing SD card...");
+  }
+
+  delay(1000);
+
+  if (DEBUG_MODE == 1) {
+    if (!SD.begin(CS_PIN)) {
+     Serial.println("SD card initialization failed!");
+    } else {
+      Serial.println("SD card initialization done.");
+    }
+  }
 
   if (DEBUG_MODE == 1) {
     Serial.println(ESP.getChipId(), HEX);
@@ -37,14 +61,9 @@ void setup() {
     Serial.print("Device IP: ");
     Serial.print(WiFi.localIP());
   }
-
-  temperaturePixels.begin();
-  temperaturePixels.setBrightness(64);
-
-  DS18B20.begin();
 }
 
 void loop() {  
-//  getRemoteWeather();
-  getInternalTemperature();
+  getRemoteWeather();
+//  getInternalTemperature();
 }

@@ -9,7 +9,9 @@
 #define MAX_TEMP_VALUE 30
 
 int getChannelValue(int value) {
-  return 255 - ((value * 255) / MAX_TEMP_VALUE);
+  int parsedValue = ((value * 255) / MAX_TEMP_VALUE);
+
+  return (parsedValue <= 255) ? 255 - parsedValue : 255;
 }
 
 int *getColorByTemp(int temp) {
@@ -34,7 +36,7 @@ int *getColorByTemp(int temp) {
   return rgb;
 }
 
-void drawPixels(int *pixel_matrix, Adafruit_NeoPixel pixels, int *rgb) {
+void drawDigits(int *pixel_matrix, Adafruit_NeoPixel pixels, int *rgb) {
   for (int i = 0; i < NUMPIXELS; i++) {
     if (pixel_matrix[i] == 1) {
       pixels.setPixelColor(i, pixels.Color(rgb[0], rgb[1], rgb[2]));
