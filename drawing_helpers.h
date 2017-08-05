@@ -6,10 +6,11 @@
 
 #include "globals.h"
 
-#define MAX_TEMP_VALUE 30
+#define MAX_POSITIVE_TEMP 40
+#define MAX_NEGATIVE_TEMP 25
 
-int getChannelValue(int value) {
-  int parsedValue = ((value * 255) / MAX_TEMP_VALUE);
+int getChannelValue(int value, int maxValue = MAX_POSITIVE_TEMP) {
+  int parsedValue = ((value * 255) / maxValue);
 
   return (parsedValue <= 255) ? 255 - parsedValue : 255;
 }
@@ -20,8 +21,8 @@ int *getColorByTemp(int temp) {
   if (temp < 0) {
     temp = temp * -1;
 
-    rgb[0] = getChannelValue(temp);
-    rgb[1] = getChannelValue(temp);
+    rgb[0] = getChannelValue(temp, MAX_NEGATIVE_TEMP);
+    rgb[1] = getChannelValue(temp, MAX_NEGATIVE_TEMP);
     rgb[2] = 255;
   } else if (temp > 0) {
     rgb[0] = 255;
