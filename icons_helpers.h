@@ -101,7 +101,7 @@ void drawIconFromName(String name, Adafruit_NeoPixel pixels) {
   if (iconFile) {
     if (DEBUG_MODE == 1) {
       Serial.println("");
-      Serial.print("Reading 01d.txt");
+      Serial.print("Reading " + fileName + " file!");
     }
 
     String output = iconFile.readString();

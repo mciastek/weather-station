@@ -64,6 +64,6 @@ void setup() {
 }
 
 void loop() {  
-  getRemoteWeather();
-//  getInternalTemperature();
+//  getRemoteWeather();
+  getInternalTemperature();
 }

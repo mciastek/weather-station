@@ -73,7 +73,11 @@ void getRemoteWeather() {
       }
 
       JsonObject& main = parsed["main"];
+      JsonArray& weather = parsed["weather"];
 
+      JsonObject& firstMeasure = weather[0];
+
+      const char *icon = firstMeasure["icon"];
       int temp = main["temp"];
       int *rgb = getColorByTemp(temp);
 
@@ -87,7 +91,7 @@ void getRemoteWeather() {
 
       insertNumberIntoMatrix(pixel_matrix, temp);
       drawDigits(pixel_matrix, temperaturePixels, rgb);
-      drawIconFromName("01d", iconPixels);
+      drawIconFromName(icon, iconPixels);
     }
 
     http.end();
@@ -111,6 +115,7 @@ void getInternalTemperature() {
 
   insertNumberIntoMatrix(pixel_matrix, temp);
   drawDigits(pixel_matrix, temperaturePixels, rgb);
+  drawIconFromName("home", iconPixels);
 
   delay(5 * MINUTE);
 }
