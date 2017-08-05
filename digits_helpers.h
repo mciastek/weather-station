@@ -50,23 +50,24 @@ int *getDigitMatrix(int digit) {
 
 void insertNumberIntoMatrix(int *matrix, int num) {
   char *digits = getDigits(num);
-  int digits_size = getNumLength(num);
+  int digitsSize = getNumLength(num);
 
   for (int i = 0; i < NUMPIXELS; i++) {
-      for (int j = 0; j < digits_size; j++) {
-          int *num_matrix = getDigitMatrix(digits[j]);
+      for (int j = 0; j < digitsSize; j++) {
+          int *numMatrix = getDigitMatrix(digits[j]);
 
           for (int k = 0; k < NUM_SIZE; k++) {
-              int num_row = (int)(k / NUM_COLS);
-              int num_column = k % NUM_COLS;
+              int columnOffset = (digitsSize == 1) ? 1 : j;
+              int numRow = (int)(k / NUM_COLS);
+              int numColumn = k % NUM_COLS;
 
-              int new_row = num_row + numberPosX;
-              int new_column = num_column + (j * numberPosY);
+              int newRow = numRow + numberPosX;
+              int newColumn = numColumn + (columnOffset * numberPosY);
 
-              int new_index = (new_row * MATRIX_COLS) + new_column;
+              int newIndex = (newRow * MATRIX_COLS) + newColumn;
 
-              if (matrix[new_index] != 1) {
-                  matrix[new_index] = num_matrix[k];
+              if (matrix[newIndex] != 1) {
+                  matrix[newIndex] = numMatrix[k];
               }
           }
       }
