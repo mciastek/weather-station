@@ -11,6 +11,7 @@
 #include "config.h"
 #include "globals.h"
 #include "weather_helpers.h"
+#include "brightness_helpers.h"
 
 void setup() {
   Serial.begin(115200);
@@ -64,6 +65,8 @@ void setup() {
 }
 
 void loop() {  
-  getRemoteWeather();
+  setAutoBrightness();
+  //getRemoteWeather();
 //  getInternalTemperature();
 }
+

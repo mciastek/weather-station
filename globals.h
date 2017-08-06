@@ -33,4 +33,6 @@
 
 #define CS_PIN 15
 
+#define PHOTORESISTOR_PIN A0
+
 #endif
